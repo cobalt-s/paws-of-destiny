@@ -1,3 +1,4 @@
+import javax.sound.sampled.Line;
 import javax.swing.text.html.Option;
 import java.util.Scanner;
 
@@ -12,79 +13,101 @@ Some things I think I could add to this is:
     - multiple cats!!!
  */
 
-
-
 public class Main {
     public static void main(String[] args) {
-        CatWellBeing CatStats = new CatWellBeing();
+        //myCat includes the name and color of cat and lets user set it from CatCreation()
+        Cat myCat = CatCreation();
+        System.out.println(myCat.getCatName());
         Scanner console = new Scanner(System.in);
 
-        Options(console, CatStats);
+        CatWellBeing CatStats = new CatWellBeing();
+
+        Options(console, CatStats, myCat);
         }
 
-        public static void CatProgram(Scanner console, CatWellBeing CatStats) {
+        public static Cat CatCreation(){
             Introduction();
-            CatIdentity(console);
-            Options(console, CatStats);
+            Scanner userCatInput = new Scanner(System.in);
+
+            System.out.println("What is your cat's name?");
+            String catName = userCatInput.nextLine();
+            System.out.println("Your new cat name is " + catName);
+
+            System.out.println("What is the color of your cat?");
+            String catColor = userCatInput.nextLine();
+            System.out.println("Awesome! Your new cat's color is " + catColor + "\n");
+
+            return new Cat(catName, catColor);
+
         }
 
         public static void Introduction(){
-            System.out.println("***************************************");
+            line();
             System.out.println("Welcome to the super cool Pet Cat Game!");
-            System.out.println("You are now a new cat owner :)");
+            System.out.println("You are now a new cat owner :) ");
+            System.out.println("Let's setup your cats name and color!");
             CatPicture1();
-            System.out.println("***************************************");
-        }
-/*
-For CatIdentity, I think it would be cool to make it as the starting method in the main method
-because we could put it so the program remembers the name and color of the cat. And that could
-add a lot of personalization to it.
- */
-        public static void CatIdentity(Scanner sc){
-            System.out.println("What is your cat's name?");
-            String name = sc.nextLine();
-            System.out.println("Your new cat name is " + name);
-            System.out.println("What is the color of your cat?");
-            String color = sc.nextLine();
-            System.out.println("Awesome! Your new cat's color is " + color);
-            System.out.println();
-            System.out.println("Your new cat's name is " + name + " and its color is " + color);
-            System.out.println();
+            line();
         }
 
-        public static void Options(Scanner sc, CatWellBeing CatStats){
+        public static void Options(Scanner sc, CatWellBeing CatStats, Cat myCat){
         // asking the user what choice they want to make.
+
+            //String getCatName = myCat.getCatName();
+
             System.out.println("What would you like to do?");
             System.out.println("(a) Start!");
             System.out.println("(b) View Stats");
             System.out.println("(c) Pet Cat");
             System.out.println("(d) Feed Cat");
-            System.out.println("(e) Exit");
-            System.out.println();
+            System.out.println("(e) Rename Cat!");
+            System.out.println("(f) Exit" + "\n");
             String choice = sc.nextLine();
 
-            // if statements for what choice user picked.
-            if(choice.equalsIgnoreCase("a")){
-                System.out.println("You have chosen \" Start! \" ");
-                CatProgram(sc, CatStats);
-            }else if (choice.equalsIgnoreCase("b")){
-                System.out.println("You have chosen \" View Stats\" ");
-                ViewStats(sc, CatStats);
+            switch(choice){
+                case "a":
+                    System.out.println("You have chosen \" Start! \" ");
+                    //CatProgram(sc, CatStats);
+                    break;
+                case "b":
+                    System.out.println("You have chosen \" View Stats\" ");
+                    ViewStats(sc, CatStats, myCat);
+                    break;
+                case "c":
+                    System.out.println("You have chosen \" Pet Cat\" ");
+                    PetCat(sc, CatStats, myCat);
+                    break;
+                case "d":
+                    System.out.println("You have chosen \" Feed Cat\" ");
+                    Cat.feed();
+                    Options(sc, CatStats, myCat);
+                    break;
+                case "e":
+                    System.out.println("You have chosen \" Rename Cat\" ");
+                    changeCatName(myCat);
+                    Options(sc, CatStats, myCat);
+                    break;
 
-            }else if (choice.equalsIgnoreCase("c")){
-                System.out.println("You have chosen \" Pet Cat\" ");
-                PetCat(sc, CatStats);
+                case "f":
+                    System.out.println("You have chosen \" Exit\" ");
+                    Exit();
+                default:
+                    System.out.println("You have not made a valid choice");
+                    break;
 
-            }else if (choice.equalsIgnoreCase("d")){
-                System.out.println("You have chosen \" Feed Cat \" ");
-                Cat.feed();
-                Options(sc, CatStats);
-            }else if(choice.equalsIgnoreCase("e")){
-                System.out.println("You have chosen \" Exit\" ");
-                Exit();
-            }else{
-                System.out.println("ERROR");
             }
+
+
+
+        }
+
+        public static void changeCatName(Cat myCat){
+            Scanner console = new Scanner(System.in);
+            System.out.println("What do you want to set the cats name to?");
+            String newCatName = console.nextLine();
+            myCat.setCatName(newCatName);
+            System.out.println("Your new cats name is " + myCat.getCatName());
+
         }
 /*
 For ViewStats, we could keep it and try to store data in a way that can be dynamically updated.
@@ -92,7 +115,7 @@ But also we could just make the game list out all the data after every stat chan
 Like what if at the end of a feed method it put out a list of your happiness, hunger, health, etc.
 with how much it changed.
  */
-        public static void ViewStats(Scanner sc, CatWellBeing CatStats){
+        public static void ViewStats(Scanner sc, CatWellBeing CatStats, Cat myCat){
             // NEEDS WORK DESPERATELY!! , THE STATS IS OFF
             //System.out.println("Your cats name is " + name);
             System.out.println();
@@ -103,7 +126,7 @@ with how much it changed.
             System.out.println("Happiness:" + CatStats.happiness );
             System.out.println("Health:" + CatStats.health );
             System.out.println();
-            Options(sc, CatStats);
+            Options(sc, CatStats, myCat);
         }
 
         public static void Exit(){
@@ -111,10 +134,11 @@ with how much it changed.
             System.exit(0);
         }
 
-        public static void PetCat(Scanner sc, CatWellBeing CatStats){
-            System.out.println("The cat appreciates the Pets!");
+        public static void PetCat(Scanner sc, CatWellBeing CatStats, Cat myCat){
+            String getCatName = myCat.getCatName();
+            System.out.println(getCatName + " appreciates your pets!");
             CatPicture2();
-            Options(sc, CatStats);
+            Options(sc, CatStats, myCat);
         }
 // kind of want to move these two into an object maybe? and I could add more cats there.
         public static void CatPicture1(){
@@ -129,5 +153,9 @@ with how much it changed.
             System.out.println("   = o_o =_______    \\ \\ ");
             System.out.println("    __^      __(  \\.__) )");
             System.out.println("   <_____>__(_____)____/");
+        }
+
+        public static void line(){
+            System.out.println("***************************************");
         }
     }

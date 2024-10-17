@@ -1,6 +1,30 @@
 import java.util.Scanner;
 
 public class Cat {
+    private String catName;
+    private String catColor;
+
+    public Cat(String catName, String catColor) {
+        this.catName = catName;
+        this.catColor = catColor;
+    }
+
+    public String getCatName() {
+        return catName;
+    }
+    public String getCatColor() {
+        return catColor;
+    }
+
+    public void setCatName(String catName) {
+        this.catName = catName;
+    }
+
+    public void setCatColor(String catColor) {
+        this.catColor = catColor;
+    }
+
+    // pet, feed, and play methods (need to rework these)
     public static void Pet(int number){
         System.out.println("THE CAT APPRECIATES YOUR PETS :3");
 
@@ -60,12 +84,4 @@ public class Cat {
         System.out.println("What would you like to play your cat with?");
 
     }
-
-    public static void Color(){
-        System.out.println("Color");
-    }
-
-
-
-
 }
